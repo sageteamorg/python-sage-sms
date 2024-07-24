@@ -3,8 +3,7 @@ import inspect
 from importlib import import_module
 from typing import ClassVar, Dict
 
-from .utils import load_settings
-from .backend.base import ConsoleSMSBackend
+from .backends.base import ConsoleSMSBackend
 from .design.interfaces.provider import ISmsProvider
 
 
