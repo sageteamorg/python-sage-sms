@@ -23,11 +23,6 @@ class BackendModuleLoader:
                     break
 
     @staticmethod
-    def _get_class_name(module_name: str) -> str:
-        # Convert the module name to CamelCase
-        return ''.join(word.capitalize() for word in module_name.split('_'))
-
-    @staticmethod
     def load_backend_module(provider: dict):
         provider_name = provider.get("NAME")
 
@@ -46,9 +41,14 @@ class BackendModuleLoader:
 
 
 class SMSBackendFactory:
-    @staticmethod
-    def get_backend(settings: dict, *args, **kwargs):
-        if settings.get("debug", False):
+
+    def __init__(self, settings: dict, base_package: str):
+        BackendModuleLoader.discover_backends(base_package)
+        self.settings = settings
+
+
+    def get_backend(self, *args, **kwargs):
+        if self.settings.get("debug", False):
             return ConsoleSMSBackend
 
         backend_class = BackendModuleLoader.load_backend_module(settings.get("provider"))
