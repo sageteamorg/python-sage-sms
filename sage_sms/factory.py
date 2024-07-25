@@ -1,5 +1,4 @@
-import pkgutil
-import inspect
+import os
 from importlib import import_module
 from typing import ClassVar, Dict
 
@@ -13,14 +12,16 @@ class BackendModuleLoader:
 
     @classmethod
     def discover_backends(cls, base_package: str):
-        backend_package = import_module(base_package)
-        for _, module_name, _ in pkgutil.iter_modules(backend_package.__path__):
-            module = import_module(f"{base_package}.{module_name}")
-            for name, obj in inspect.getmembers(module, inspect.isclass):
-                # Check if the class implements ISmsProvider and is not ISmsProvider itself
-                if issubclass(obj, ISmsProvider) and obj is not ISmsProvider:
-                    cls._provider_classname_map[module_name] = obj.__name__
-                    break
+        base_path = base_package.replace('.', '/')
+        for root, _, files in os.walk(base_path):
+            for file in files:
+                if file.endswith('.py') and file != '__init__.py':
+                    module_name = file[:-3]  # Strip '.py' extension
+                    module = import_module(f"{base_package}.{module_name}")
+                    for name, obj in module.__dict__.items():
+                        if isinstance(obj, type) and issubclass(obj, ISmsProvider) and obj is not ISmsProvider:
+                            cls._provider_classname_map[module_name] = obj.__name__
+                            break
 
     @staticmethod
     def load_backend_module(provider: dict):
