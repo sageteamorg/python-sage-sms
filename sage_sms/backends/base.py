@@ -18,11 +18,17 @@ class ConsoleSMSBackend(BaseSMSBackend):
         self.stream.write("-" * 79)
         self.stream.write("\n")
 
-    def send_one_message(self, phone_number: str, message: str, line_number: str | None = None):
-        msg = f"Recipient: {phone_number}\nMessage: {message}\nLine Number: {line_number}"
+    def send_one_message(
+        self, phone_number: str, message: str, line_number: str | None = None
+    ):
+        msg = (
+            f"Recipient: {phone_number}\nMessage: {message}\nLine Number: {line_number}"
+        )
         self._write_message(msg)
 
-    def send_bulk_messages(self, phone_numbers: list[str], message: str, line_number: str | None = None):
+    def send_bulk_messages(
+        self, phone_numbers: list[str], message: str, line_number: str | None = None
+    ):
         for phone_number in phone_numbers:
             self.send_one_message(phone_number, message, line_number)
 

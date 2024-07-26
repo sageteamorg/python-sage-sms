@@ -12,14 +12,18 @@ class BackendModuleLoader:
 
     @classmethod
     def discover_backends(cls, base_package: str):
-        base_path = base_package.replace('.', '/')
+        base_path = base_package.replace(".", "/")
         for root, _, files in os.walk(base_path):
             for file in files:
-                if file.endswith('.py') and file != '__init__.py':
+                if file.endswith(".py") and file != "__init__.py":
                     module_name = file[:-3]  # Strip '.py' extension
                     module = import_module(f"{base_package}.{module_name}")
                     for name, obj in module.__dict__.items():
-                        if isinstance(obj, type) and issubclass(obj, ISmsProvider) and obj is not ISmsProvider:
+                        if (
+                            isinstance(obj, type)
+                            and issubclass(obj, ISmsProvider)
+                            and obj is not ISmsProvider
+                        ):
                             cls._provider_classname_map[module_name] = obj.__name__
                             break
 
@@ -54,5 +58,7 @@ class SMSBackendFactory:
         if self.settings.get("debug", False):
             return ConsoleSMSBackend
 
-        backend_class = BackendModuleLoader.load_backend_module(self.settings.get("provider"), self.base_package)
+        backend_class = BackendModuleLoader.load_backend_module(
+            self.settings.get("provider"), self.base_package
+        )
         return backend_class
