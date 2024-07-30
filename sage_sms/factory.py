@@ -1,9 +1,21 @@
+import logging
 import os
 from importlib import import_module
-from typing import ClassVar, Dict
+from typing import ClassVar, Dict, Optional
 
 from .backends.base import ConsoleSMSBackend
 from .design.interfaces.provider import ISmsProvider
+from .helper.exceptions import (
+    SMSBackendError,
+    SMSConfigurationError,
+    SMSProviderNotFoundError,
+    SMSUnexpectedError,
+)
+from .helper.type import ProviderSettings, SMSSettings
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 
 class BackendModuleLoader:
@@ -12,6 +24,7 @@ class BackendModuleLoader:
 
     @classmethod
     def discover_backends(cls, base_package: str):
+        logger.debug(f"Discovering backends in package: {base_package}")
         base_path = base_package.replace(".", "/")
         for root, _, files in os.walk(base_path):
             for file in files:
@@ -25,40 +38,61 @@ class BackendModuleLoader:
                             and obj is not ISmsProvider
                         ):
                             cls._provider_classname_map[module_name] = obj.__name__
+                            logger.debug(
+                                f"Found provider: {module_name}.{obj.__name__}"
+                            )
                             break
 
     @staticmethod
-    def load_backend_module(provider: dict, base_package: str):
+    def load_backend_module(provider: ProviderSettings, base_package: str):
         provider_name = provider.get("NAME")
+        logger.debug(f"Loading backend module for provider: {provider_name}")
 
         if not provider_name:
-            raise ValueError("Provider key is missing in settings.")
+            logger.error("Provider key is missing in settings.")
+            raise SMSConfigurationError("Provider key is missing in settings.")
 
         if provider_name not in BackendModuleLoader._provider_classname_map:
-            raise ValueError(f"Unsupported provider: {provider_name}")
+            logger.error(f"Unsupported provider: {provider_name}")
+            raise SMSProviderNotFoundError(f"Unsupported provider: {provider_name}")
 
         if provider_name in BackendModuleLoader._cached_backends:
+            logger.debug(f"Using cached backend for provider: {provider_name}")
             return BackendModuleLoader._cached_backends[provider_name]
 
         class_name = BackendModuleLoader._provider_classname_map[provider_name]
         module = import_module(f"{base_package}.{provider_name}")
         provider_class = getattr(module, class_name)
         BackendModuleLoader._cached_backends[provider_name] = provider_class
+        logger.debug(f"Loaded backend module: {provider_name}.{class_name}")
         return provider_class
 
 
 class SMSBackendFactory:
-
-    def __init__(self, settings: dict, base_package: str):
-        BackendModuleLoader.discover_backends(base_package)
+    def __init__(self, settings: SMSSettings, base_package: str):
         self.settings = settings
         self.base_package = base_package
+        try:
+            BackendModuleLoader.discover_backends(base_package)
+            logger.debug(f"Discovered backends for package: {base_package}")
+        except Exception as e:
+            logger.exception(f"Unexpected error during backend discovery: {e}")
+            raise SMSUnexpectedError(f"Unexpected error during backend discovery: {e}")
 
     def get_backend(self, *args, **kwargs):
-        if self.settings.get("debug", False):
-            return ConsoleSMSBackend
+        try:
+            if self.settings.get("debug", False):
+                logger.debug("Debug mode enabled, using ConsoleSMSBackend")
+                return ConsoleSMSBackend
 
-        backend_class = BackendModuleLoader.load_backend_module(
-            self.settings.get("provider"), self.base_package
-        )
-        return backend_class
+            backend_class = BackendModuleLoader.load_backend_module(
+                self.settings.get("provider"), self.base_package
+            )
+            logger.debug(f"Loaded backend class: {backend_class}")
+            return backend_class
+        except SMSBackendError as e:
+            logger.exception(f"SMSBackendError occurred: {e}")
+            raise e
+        except Exception as e:
+            logger.exception(f"Unexpected error while getting backend: {e}")
+            raise SMSUnexpectedError(f"Unexpected error while getting backend: {e}")
