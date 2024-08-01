@@ -3,15 +3,15 @@ import os
 from importlib import import_module
 from typing import ClassVar, Dict, Optional
 
-from .backends.base import ConsoleSMSBackend
-from .design.interfaces.provider import ISmsProvider
-from .helper.exceptions import (
+from sage_sms.backends.base import ConsoleSMSBackend
+from sage_sms.design.interfaces.provider import ISmsProvider
+from sage_sms.helper.exceptions import (
     SMSBackendError,
     SMSConfigurationError,
     SMSProviderNotFoundError,
     SMSUnexpectedError,
 )
-from .helper.type import ProviderSettings, SMSSettings
+from sage_sms.helper.type import ProviderSettings, SMSSettings
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)

@@ -1,6 +1,6 @@
 import sys
 
-from ..design.interfaces.provider import ISmsProvider
+from sage_sms.design.interfaces.provider import ISmsProvider
 
 
 class BaseSMSBackend:
