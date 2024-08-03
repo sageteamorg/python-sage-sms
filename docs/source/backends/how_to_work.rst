@@ -1,7 +1,7 @@
 .. _creating-backends:
 
-Create
-=======================
+How to work with Backends
+==========================
 
 To create an SMS backend for the Sage SMS package, follow these steps. This example demonstrates the implementation of backends for the Twilio and SMS_IR providers.
 
@@ -68,12 +68,10 @@ Implementation
                 logger.error(f"Failed to send message to {phone_number}: {e}")
 
         def send_bulk_messages(self, phone_numbers: list[str], message: str, linenumber=None) -> None:
-            for phone_number in phone_numbers:
-                self.send_one_message(phone_number, message, linenumber)
+            raise NotImplementedError
 
         def send_verify_message(self, phone_number: str, value: str):
-            msg = f"Your verification code is: {value}"
-            self.send_one_message(phone_number, msg, self._line_number)
+            raise NotImplementedError
 
 SMS_IR Backend Implementation
 =============================
@@ -119,12 +117,10 @@ Implementation
             self.smsir.send_sms(cast_phone_number, message, self._line_number)
 
         def send_bulk_messages(self, phone_numbers: list[str], message: str, linenumber=None) -> None:
-            for phone_number in phone_numbers:
-                self.send_one_message(phone_number, message, linenumber)
+            raise NotImplementedError
 
         def send_verify_message(self, phone_number: str, value: str) -> None:
-            msg = f"Your verification code is: {value}"
-            self.send_one_message(phone_number, msg, self._line_number)
+            raise NotImplementedError
 
 Steps to Implement a Backend
 =============================

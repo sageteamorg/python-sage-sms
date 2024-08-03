@@ -79,34 +79,3 @@ Poetry automatically manages a virtual environment for your project. To activate
 .. code-block:: bash
 
     poetry shell
-
-Verification
-------------
-
-To verify the installation, you can run a simple script to import the package:
-
-.. code-block:: python
-
-    # Import the factory class from the package
-    from sage_sms.factory import SMSBackendFactory
-
-    # Define settings for the SMS provider
-    settings = {
-        "debug": False,
-        "provider": {
-            "NAME": "provider_name",
-            "API_KEY": "your_api_key"
-        }
-    }
-
-    # Settings and The base package path for the backends
-    factory = SMSBackendFactory(settings, "sage_sms.backends")
-
-    # Get the SMS provider class and instantiate it
-    sms_provider_class = factory.get_backend()
-    sms_provider = sms_provider_class(settings)
-
-    # Send a test SMS message
-    sms_provider.send_one_message("+1234567890", "Hello, World!")
-
-Run the script using the Python interpreter within your virtual environment or Poetry shell to ensure everything is set up correctly.
