@@ -13,8 +13,6 @@ from sage_sms.helper.exceptions import (
 )
 from sage_sms.helper.type import ProviderSettings, SMSSettings
 
-# Configure logging
-logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
