@@ -26,8 +26,6 @@ black = "^24.4.2"
 isort = "^5.13.2"
 mypy = "^1.10.1"
 pytest = "^8.2.2"
-flake8 = "^7.1.0"
-tox = "^4.15.1"
 coverage = "^7.5.4"
 pre-commit = "^3.7.1"
 sphinx = "^7.3.7"
@@ -99,7 +97,7 @@ skip = [
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.2.0"
+version = "0.1.0"
 
 [tool.commitizen.settings]
 increment_types = ["feat", "fix"]
