@@ -1,7 +1,7 @@
 import logging
 import os
 from importlib import import_module
-from typing import ClassVar, Dict, Optional
+from typing import ClassVar, Dict
 
 from sage_sms.backends.base import ConsoleSMSBackend
 from sage_sms.design.interfaces.provider import ISmsProvider

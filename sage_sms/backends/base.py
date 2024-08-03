@@ -1,7 +1,5 @@
 import sys
 
-from sage_sms.design.interfaces.provider import ISmsProvider
-
 
 class BaseSMSBackend:
     def __init__(self, settings: dict):
