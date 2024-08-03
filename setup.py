@@ -4,18 +4,17 @@ with open("README.md", encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
-    name="python_sage_imap",
-    version="0.3.0",
-    author="Sepehr Akbarzadeh",
-    author_email="info@sageteam.org",
-    description="Managing IMAP connections and performing various email operations.",
+    name="python_sage_sms",
+    version="0.1.0",
+    author="Mohammad Fotouhi",
+    author_email="mohammad@sageteam.org",
+    description="A Python client library for managing BigBlueButton connections and operations.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/sageteamorg/python-sage-imap",
+    url="https://github.com/sageteamorg/python-sage-sms",
     projcet_urls={
-        "Documentation": "https://python-sage-imap.readthedocs.io/en/latest/",
-        "Source Code": "https://github.com/sageteamorg/python-sage-imap",
-        "Issues": "https://github.com/sageteamorg/python-sage-imap/issues",
+        "Documentation": "https://python-sage-sms.readthedocs.io/en/latest/",
+        "Issues": "https://github.com/sageteamorg/python-sage-sms/issues",
     },
     packages=find_packages(),
     classifiers=[
