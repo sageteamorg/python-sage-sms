@@ -7,6 +7,14 @@ except ImportError:
 
 
 class PhoneNumberDescriptor:
+    """
+    Descriptor class for phone number validation and formatting.
+
+    Args:
+        name (str): The name of the phone number attribute.
+        region (Optional[str]): The region code for phone number parsing.
+    """
+
     def __init__(self, name: str, region: Optional[str] = None) -> None:
         self.name: str = name
         self.region: Optional[str] = region
@@ -37,6 +45,9 @@ class PhoneNumberValidator:
     PhoneNumberValidator Class
 
     Responsible for validating and formatting phone numbers.
+
+    Attributes:
+        phone_number (PhoneNumberDescriptor): The phone number descriptor.
     """
 
     phone_number: PhoneNumberDescriptor = PhoneNumberDescriptor("phone_number")
