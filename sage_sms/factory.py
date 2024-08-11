@@ -17,11 +17,25 @@ logger = logging.getLogger(__name__)
 
 
 class BackendModuleLoader:
+    """
+    A class responsible for discovering and loading SMS backend modules.
+
+    Attributes:
+        _cached_backends (ClassVar[Dict[str, type]]): A class variable for caching backend classes.
+        _provider_classname_map (ClassVar[Dict[str, type]]): A class variable for mapping provider names to class names.
+    """
+
     _cached_backends: ClassVar[Dict[str, type]] = {}
     _provider_classname_map: ClassVar[Dict[str, type]] = {}
 
     @classmethod
     def discover_backends(cls, base_package: str):
+        """
+        Discover backend modules in the specified base package.
+
+        Args:
+            base_package (str): The base package where backend modules are located.
+        """
         logger.debug(f"Discovering backends in package: {base_package}")
         base_path = base_package.replace(".", "/")
         for root, _, files in os.walk(base_path):
@@ -43,6 +57,20 @@ class BackendModuleLoader:
 
     @staticmethod
     def load_backend_module(provider: ProviderSettings, base_package: str):
+        """
+        Load the backend module for the specified provider.
+
+        Args:
+            provider (ProviderSettings): The settings for the provider.
+            base_package (str): The base package where backend modules are located.
+
+        Returns:
+            type: The backend class for the specified provider.
+
+        Raises:
+            SMSConfigurationError: If the provider key is missing in settings.
+            SMSProviderNotFoundError: If the provider is not supported.
+        """
         provider_name = provider.get("NAME")
         logger.debug(f"Loading backend module for provider: {provider_name}")
 
@@ -67,6 +95,18 @@ class BackendModuleLoader:
 
 
 class SMSBackendFactory:
+    """
+    A factory class for creating SMS backend instances.
+
+    Args:
+        settings (SMSSettings): The settings for SMS backend configuration.
+        base_package (str): The base package where backend modules are located.
+
+    Attributes:
+        settings (SMSSettings): The settings for SMS backend configuration.
+        base_package (str): The base package where backend modules are located.
+    """
+
     def __init__(self, settings: SMSSettings, base_package: str):
         self.settings = settings
         self.base_package = base_package
@@ -78,6 +118,16 @@ class SMSBackendFactory:
             raise SMSUnexpectedError(f"Unexpected error during backend discovery: {e}")
 
     def get_backend(self, *args, **kwargs):
+        """
+        Get the SMS backend instance based on the provided settings.
+
+        Returns:
+            type: The backend class for sending SMS messages.
+
+        Raises:
+            SMSBackendError: If there is an error with the SMS backend.
+            SMSUnexpectedError: If an unexpected error occurs.
+        """
         try:
             if self.settings.get("debug", False):
                 logger.debug("Debug mode enabled, using ConsoleSMSBackend")
