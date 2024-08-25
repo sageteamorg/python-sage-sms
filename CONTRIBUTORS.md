@@ -11,8 +11,13 @@ We would like to thank the following people for their contributions to the `pyth
 
 - **Radin Ghahremani**
   - GitHub: [github-radon](https://github.com/github-radon)
-  - Email: radinceorc77@gmail.com>
+  - Email: radinceorc77@gmail.com
   - Contributions: Core contributor.
+
+- **Aryan Niknezhad**
+  - GitHub: [ARYAN-NIKNEZHAD](https://github.com/ARYAN-NIKNEZHAD)
+  - Email: aryan513966@gmail.com
+  - Contributors: maintainer
 
 ---
 
