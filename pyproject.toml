@@ -12,7 +12,14 @@ license = "MIT"
 keywords = ["python", "sms", "integration"]
 
 classifiers=[
+    "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
@@ -35,6 +42,19 @@ docformatter = "^1.7.5"
 codecov = "^2.1.13"
 sphinx-rtd-theme = "^2.0.0"
 ruff = "^0.5.6"
+
+[tool.pytest.ini_options]
+addopts = "--cov --cov-report=term-missing --cov-report=html --cov-fail-under=90"
+python_files = ["tests.py", "test_*.py"]
+testpaths = ["tests"]
+norecursedirs = [
+    "node_modules",
+    "env",
+    "venv",
+    ".venv",
+    "dist",
+    "build",
+]
 
 [tool.mypy]
 mypy_path = "stubs"
@@ -92,6 +112,24 @@ skip = [
     "node_modules",
     "env",
     "kernel"
+]
+
+[tool.coverage.run]
+omit = [
+    "*/migrations/*",
+    "kernel/*",
+    "*/apps.py",
+    "manage.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self\\.debug",
+    "raise AssertionError",
+    "if 0:",
+    "if __name__ == .__main__.:"
 ]
 
 [tool.commitizen]
