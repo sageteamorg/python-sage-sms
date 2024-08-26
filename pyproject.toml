@@ -24,6 +24,9 @@ classifiers=[
     "Operating System :: OS Independent",
 ]
 
+[tool.poetry.urls]
+"Source Code" = "https://github.com/sageteamorg/python-sage-sms"
+"Issues" = "https://github.com/sageteamorg/python-sage-sms/issues"
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
