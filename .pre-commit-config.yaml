@@ -77,7 +77,7 @@ repos:
           - "-rn"
           - "-sn"
           - "--rcfile=pyproject.toml"
-        files: ^sage_meta/
+        files: ^sage_sms/
 
 ci:
   skip: [pylint]
