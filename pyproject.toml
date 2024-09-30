@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-sage-sms"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Python package for sending SMS with different providers"
 authors = [
     "Sepehr Akbarzadeh <sepehr@sageteam.org>",
@@ -10,6 +10,10 @@ authors = [
 readme = "README.md"
 license = "MIT"
 keywords = ["python", "sms", "integration"]
+
+packages = [
+  { include = "sage_sms" },
+]
 
 classifiers=[
     "Programming Language :: Python",
@@ -29,7 +33,7 @@ classifiers=[
 "Issues" = "https://github.com/sageteamorg/python-sage-sms/issues"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<4.0"
+python = ">=3.9,<4.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.2"
